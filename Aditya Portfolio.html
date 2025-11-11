@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Aditya Kumar Goswami — Portfolio Preview</title>
+<style>
+  /* Basic reset */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: 'Courier New', Courier, monospace;
+    background:#04120a;
+    color:#9ffca8;
+    overflow-y:scroll;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  /* Matrix canvas sits behind content */
+  #matrix {
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:#020403;
+  }
+  /* Page container */
+  .wrap{position:relative;z-index:2;max-width:1150px;margin:40px auto;padding:30px}
+  header{display:flex;align-items:center;justify-content:center;flex-direction:column;margin-bottom:30px;text-align:center}
+  .hero h1{font-size:64px;letter-spacing:6px;color:#00c85a;text-shadow:0 0 18px rgba(0,200,90,0.12)}
+  .hero h2{font-size:20px;margin:14px 0;color:#cfeedd}
+  .hero .cta{margin-top:18px;display:flex;gap:14px;align-items:center;justify-content:center}
+  .btn{background:#052e1a;border:1px solid #04c85a;color:#bfffd0;padding:12px 18px;border-radius:8px;cursor:pointer;text-decoration:none}
+  .btn.primary{background:#00c85a;color:#021006;box-shadow:0 6px 18px rgba(0,200,90,0.08);border:1px solid rgba(0,200,90,0.9)}
+  .socials{margin-top:18px;display:flex;gap:12px;align-items:center;justify-content:center}
+  .socials a{display:inline-block;padding:10px 18px;border:1px solid rgba(0,200,90,0.18);border-radius:6px;color:#bfffd0;text-decoration:none}
+  nav.topnav{position:fixed;top:6px;left:0;right:0;z-index:3;background:transparent;padding:8px 18px;border-bottom:1px solid rgba(4,200,90,0.03);display:flex;justify-content:center;gap:18px}
+  nav.topnav a{color:#9ffca8;text-decoration:none;padding:6px 10px;font-size:15px}
+  section{margin:40px 0;padding:18px;border-radius:10px;background:linear-gradient(180deg,rgba(0,0,0,0.28),rgba(0,0,0,0.55));border:1px solid rgba(0,200,90,0.04);box-shadow:0 6px 24px rgba(0,0,0,0.6)}
+  h3.section-title{font-size:32px;color:#06d06f;padding-left:8px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .stat{padding:20px;border-radius:10px;background:rgba(0,0,0,0.25);border:1px solid rgba(0,200,90,0.06);text-align:center}
+  .stat .num{font-size:28px;color:#00d169}
+  /* education area */
+  .edu .card{padding:22px;border-radius:12px;border:1px solid rgba(0,200,90,0.06);background:rgba(0,0,0,0.18)}
+  .cgpa{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .bar{flex:1;height:10px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:94%;background:linear-gradient(90deg,#00c85a,#00ff9a)}
+  .cgpa .val{font-weight:700;color:#00c85a}
+  /* internships list */
+  .intern-list{display:flex;flex-direction:column;gap:12px}
+  .intern{padding:16px;border-radius:8px;border:1px solid rgba(0,200,90,0.04);background:rgba(0,0,0,0.18)}
+  /* skills */
+  .skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .skill-card{padding:18px;border-radius:12px;border:1px solid rgba(0,200,90,0.04);background:rgba(0,0,0,0.14)}
+  .skill-line{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
+  .prog{height:8px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+  .prog > b{display:block;height:100%;background:linear-gradient(90deg,#00c85a,#00ff9a)}
+  .tools{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .tag{padding:6px 8px;border-radius:6px;border:1px solid rgba(0,200,90,0.12);font-size:13px}
+  /* certifications */
+  .cert-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .cert{padding:14px;border-radius:10px;border:1px solid rgba(0,200,90,0.04);background:rgba(0,0,0,0.14)}
+  .cert .cat{display:inline-block;margin-top:10px;padding:6px;border-radius:6px;background:rgba(0,200,90,0.03);border:1px solid rgba(0,200,90,0.05);font-size:12px}
+  /* projects */
+  .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .project{padding:18px;border-radius:10px;border:1px solid rgba(0,200,90,0.05);background:rgba(0,0,0,0.16)}
+  /* blog */
+  .blog-list{display:flex;flex-direction:column;gap:14px}
+  .post{padding:18px;border-radius:10px;border:1px solid rgba(0,200,90,0.05);background:rgba(0,0,0,0.14)}
+  .post .meta{display:flex;gap:12px;align-items:center;color:#a7f4c6;margin-bottom:8px}
+  .readmore{margin-top:8px;display:inline-block;color:#00f28a;text-decoration:underline;cursor:pointer}
+  .post-content{display:none;margin-top:12px;color:#dfffe4;line-height:1.6;white-space:pre-wrap}
+  /* footer */
+  footer{padding:18px;text-align:center;color:#83f9a2;margin-top:40px;border-top:1px solid rgba(0,200,90,0.03)}
+  /* animations */
+  .fade-in{opacity:0;transform:translateY(12px);transition:all 700ms ease}
+  .fade-in.visible{opacity:1;transform:none}
+  .card-hover{transition:transform .25s ease,box-shadow .25s ease}
+  .card-hover:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(0,200,90,0.06)}
+  /* responsive */
+  @media(max-width:900px){
+    .two-col,.skill-grid,.projects-grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .cert-grid{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<nav class="topnav" aria-hidden="false">
+  <a href="#home">home</a>
+  <a href="#about">about</a>
+  <a href="#education">education</a>
+  <a href="#experience">experience</a>
+  <a href="#skills">skills</a>
+  <a href="#certs">certifications</a>
+  <a href="#projects">projects</a>
+  <a href="#blog">blog</a>
+  <a href="#contact">contact</a>
+</nav>
+
+<div class="wrap">
+
+  <header id="home" class="hero fade-in">
+    <div style="margin-bottom:6px;color:#00ff8a;background:rgba(0,255,120,0.02);display:inline-block;padding:6px 10px;border-radius:6px;border:1px solid rgba(0,200,90,0.08)">&gt;_ root@portfolio:~$ whoami</div>
+    <h1>Aditya Kumar Goswami</h1>
+    <h2>&lt;Associate SOC Engineer/&gt;<br>Blue Team Specialist | Threat Detection | Incident Response | Vulnerability Assessment</h2>
+
+    <div class="cta">
+      <a class="btn primary" id="contactBtn">Get In Touch</a>
+      <a class="btn" href="Aditya_Kumar_Goswami_Resume.pdf" download>Download Resume</a>
+    </div>
+
+    <div class="socials" style="margin-top:18px">
+      <a href="#" target="_blank">LinkedIn</a>
+      <a href="#" target="_blank">GitHub</a>
+    </div>
+  </header>
+
+  <section id="about" class="fade-in">
+    <h3 class="section-title">// ABOUT_ME</h3>
+    <div class="two-col">
+      <div class="card card-hover">
+        <h4 style="color:#bfffd0">whoami _</h4>
+        <p style="color:#cfeedd;margin-top:12px">
+I am a dedicated cybersecurity professional with over 1.5 years of hands-on experience in Security Operations Centers (SOC), specializing in blue team operations, threat detection, and incident response.
+
+As an Associate SOC Engineer at Investis Digital, I focus on proactive monitoring, vulnerability management, and infrastructure security across cloud and enterprise platforms. My expertise spans WAF monitoring, log analysis, vulnerability assessment, and security automation.
+
+With a strong foundation in DFIR, VAPT, and GRC, I bring a comprehensive approach to cybersecurity challenges.
+        </p>
+      </div>
+
+      <div>
+        <div class="stats">
+          <div class="stat card-hover">
+            <div style="font-size:18px;color:#9ffca8">Alerts Resolved</div>
+            <div class="num">10,000+</div>
+          </div>
+          <div class="stat card-hover">
+            <div style="font-size:18px;color:#9ffca8">Years Experience</div>
+            <div class="num">1.5+</div>
+          </div>
+          <div class="stat card-hover">
+            <div style="font-size:18px;color:#9ffca8">Certifications</div>
+            <div class="num">40+</div>
+          </div>
+          <div class="stat card-hover">
+            <div style="font-size:18px;color:#9ffca8">CGPA</div>
+            <div class="num">9.47</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="fade-in">
+    <h3 class="section-title">// EDUCATION</h3>
+    <div class="edu">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:20px;color:#dfffe4;font-weight:700">Bachelor of Science in Forensic Science</div>
+            <div style="color:#8ef0b6;margin-top:6px">Specialization: Cyber Forensics</div>
+            <div style="margin-top:10px;color:#a7f4c6">2021 - 2024</div>
+          </div>
+          <div style="font-size:22px;color:#00ff8a;font-weight:700">Gold Medalist</div>
+        </div>
+
+        <div class="cgpa">
+          <div style="flex:1">
+            <div style="color:#93fdb2;margin-bottom:6px">CGPA</div>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="val">9.47</div>
+        </div>
+
+        <div style="margin-top:10px;padding:12px;border:1px solid rgba(0,200,90,0.03);border-radius:8px;background:rgba(0,0,0,0.06)">
+          <strong style="color:#bfffd0">Key Areas of Study:</strong>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;color:#cfeedd">
+            <div>• Digital Forensics<br>• Network Security<br>• Malware Analysis</div>
+            <div>• Cyber Crime Investigation<br>• Incident Response<br>• Forensic Tools & Techniques</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:18px" class="card">
+        <div style="font-size:20px;color:#dfffe4;font-weight:700">Diploma in Cybersecurity</div>
+        <div style="color:#8ef0b6;margin-top:6px">Oxford Home Study Center (OHSC)</div>
+        <div style="margin-top:8px;color:#a7f4c6">Dec 2023 - Oct 2024</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="fade-in">
+    <h3 class="section-title">// EXPERIENCE</h3>
+    <div class="card card-hover">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:20px;color:#dfffe4;font-weight:700">Associate SOC Engineer</div>
+          <div style="color:#8ef0b6">Investis Digital Pvt Ltd (IDX)</div>
+          <div style="color:#9ffca8;margin-top:8px">May 2024 - Present</div>
+        </div>
+        <div style="font-size:18px;color:#8ef0b6">▴</div>
+      </div>
+
+      <div style="margin-top:12px;color:#cfeedd">
+        Blue Team specialist in Global SOC focusing on proactive monitoring, incident detection, vulnerability management, and infrastructure security across cloud and enterprise platforms.
+      </div>
+
+      <div style="margin-top:12px">
+        <strong style="color:#bfffd0">WAF & Threat Monitoring</strong>
+        <ul style="margin-top:8px;color:#cfeedd">
+          <li>Monitor Cloudflare WAF, analyze traffic insights, and fine-tune custom rules</li>
+          <li>Detect & respond to false positives, DDoS events, and bot anomalies</li>
+          <li>Manage IP blacklists/whitelists, validate alerts, and deploy mitigations</li>
+          <li>Use Symantec WAF to block malicious entities and track server-side tasks</li>
+        </ul>
+
+        <strong style="color:#bfffd0">Log Analysis & Incident Response</strong>
+        <ul style="margin-top:8px;color:#cfeedd">
+          <li>Use Kibana, AWS CloudWatch, and custom dashboards for traffic analysis</li>
+          <li>Monitor ALB, CDN, IIS logs across multiple regions</li>
+          <li>Perform live event monitoring and outage triage via PagerDuty</li>
+        </ul>
+
+        <strong style="color:#bfffd0">Cloud Security & VAPT</strong>
+        <ul style="margin-top:8px;color:#cfeedd">
+          <li>Perform EC2/S3 visibility checks, WAF tuning, and threat detection</li>
+          <li>Use Burp Suite, ZAP, Nmap, Nessus, SQLMap for vulnerability scanning</li>
+          <li>Simulate manual exploitation and maintain scan reports</li>
+        </ul>
+
+        <strong style="color:#bfffd0">Security Operations</strong>
+        <ul style="margin-top:8px;color:#cfeedd">
+          <li>Validate findings on Bitsight and create evidence documentation</li>
+          <li>Track privileged access and dark web exposure using SOCRadar</li>
+          <li>Automated SSL renewal reminders and Jira workflow integration</li>
+          <li>Resolved 10,000+ security alerts with thorough analysis</li>
+        </ul>
+
+        <div style="margin-top:12px">
+          <strong style="color:#bfffd0">Tools & Technologies:</strong>
+          <div class="tools" style="margin-top:8px">
+            <span class="tag">Cloudflare</span>
+            <span class="tag">Symantec</span>
+            <span class="tag">Kibana</span>
+            <span class="tag">AWS CloudWatch</span>
+            <span class="tag">PagerDuty</span>
+            <span class="tag">Burp Suite</span>
+            <span class="tag">Nmap</span>
+            <span class="tag">Nessus</span>
+            <span class="tag">Bitsight</span>
+            <span class="tag">SOCRadar</span>
+            <span class="tag">Jira</span>
+            <span class="tag">Confluence</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div style="margin-top:18px" class="card card-hover">
+      <h4 style="color:#bfffd0">Internships</h4>
+      <div class="intern-list" style="margin-top:10px">
+        <div class="intern">Cybersecurity Intern — Cyber Secured India (Dec 2023 - Mar 2024)</div>
+        <div class="intern">Compliance Intern — Sannibh Technologies (Dec 2023 - Jan 2024)</div>
+        <div class="intern">SOC Analyst — Chaitanya Cyber Strix Technologies (Nov 2023 - Jan 2024)</div>
+        <div class="intern">Cyber Crime Investigator — CFSS Cyber & Forensics Security Solutions (Nov 2023 - Dec 2023)</div>
+        <div class="intern">Cyber Security Analyst — Cyber Octet Pvt Ltd (May 2023)</div>
+        <div class="intern">Computer Forensic Analyst — Regional Forensic Science Laboratory (Apr 2023 - May 2023)</div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="skills" class="fade-in">
+    <h3 class="section-title">// SKILLS</h3>
+    <div class="skill-grid">
+      <div class="skill-card card-hover">
+        <h4 style="color:#bfffd0">SOC Operations</h4>
+        <div class="skill-line"><div>Threat Monitoring</div><div>90%</div></div>
+        <div class="prog"><b style="width:90%"></b></div>
+        <div class="skill-line"><div>Incident Response</div><div>85%</div></div>
+        <div class="prog"><b style="width:85%"></b></div>
+        <div class="skill-line"><div>Log Analysis</div><div>90%</div></div>
+        <div class="prog"><b style="width:90%"></b></div>
+        <div class="skill-line"><div>SIEM Management</div><div>85%</div></div>
+        <div class="prog"><b style="width:85%"></b></div>
+        <div class="skill-line"><div>Security Automation</div><div>80%</div></div>
+        <div class="prog"><b style="width:80%"></b></div>
+        <div style="margin-top:10px" class="tools">
+          <span class="tag">Kibana</span><span class="tag">Wazuh</span><span class="tag">Suricata</span><span class="tag">Splunk</span><span class="tag">SumoLogic</span><span class="tag">Log360</span>
+        </div>
+      </div>
+
+      <div class="skill-card card-hover">
+        <h4 style="color:#bfffd0">VAPT</h4>
+        <div class="skill-line"><div>Web Application Security</div><div>75%</div></div>
+        <div class="prog"><b style="width:75%"></b></div>
+        <div class="skill-line"><div>Network Scanning</div><div>80%</div></div>
+        <div class="prog"><b style="width:80%"></b></div>
+        <div class="skill-line"><div>Vulnerability Assessment</div><div>85%</div></div>
+        <div class="prog"><b style="width:85%"></b></div>
+        <div style="margin-top:10px" class="tools">
+          <span class="tag">Burp Suite</span><span class="tag">ZAP</span><span class="tag">Nmap</span><span class="tag">Nessus</span><span class="tag">SQLMap</span>
+        </div>
+      </div>
+
+      <div class="skill-card card-hover">
+        <h4 style="color:#bfffd0">DFIR</h4>
+        <div class="skill-line"><div>Digital Forensics</div><div>80%</div></div>
+        <div class="prog"><b style="width:80%"></b></div>
+        <div class="skill-line"><div>Incident Investigation</div><div>85%</div></div>
+        <div class="prog"><b style="width:85%"></b></div>
+        <div class="skill-line"><div>Malware Analysis</div><div>75%</div></div>
+        <div class="prog"><b style="width:75%"></b></div>
+        <div style="margin-top:10px" class="tools">
+          <span class="tag">Autopsy</span><span class="tag">FTK</span><span class="tag">The Hive</span><span class="tag">MISP</span><span class="tag">Wireshark</span>
+        </div>
+      </div>
+
+      <div class="skill-card card-hover">
+        <h4 style="color:#bfffd0">GRC</h4>
+        <div class="skill-line"><div>Compliance Auditing</div><div>80%</div></div>
+        <div class="prog"><b style="width:80%"></b></div>
+        <div class="skill-line"><div>Risk Assessment</div><div>75%</div></div>
+        <div class="prog"><b style="width:75%"></b></div>
+        <div class="skill-line"><div>Policy Development</div><div>70%</div></div>
+        <div class="prog"><b style="width:70%"></b></div>
+        <div style="margin-top:10px" class="tools">
+          <span class="tag">ISO 27001</span><span class="tag">NIST</span><span class="tag">CIS Controls</span><span class="tag">Bitsight</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px" class="skill-card card-hover">
+      <h4 style="color:#bfffd0">Cloud Platforms</h4>
+      <div style="display:flex;gap:18px;align-items:center;margin-top:8px">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between"><div>AWS</div><div>85%</div></div>
+          <div class="prog"><b style="width:85%"></b></div>
+          <div class="tools" style="margin-top:8px"><span class="tag">EC2</span><span class="tag">S3</span><span class="tag">CloudWatch</span><span class="tag">WAF</span><span class="tag">IAM</span></div>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between"><div>Azure</div><div>60%</div></div>
+          <div class="prog"><b style="width:60%"></b></div>
+          <div class="tools" style="margin-top:8px"><span class="tag">Virtual Machines</span><span class="tag">Security Center</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="certs" class="fade-in">
+    <h3 class="section-title">// CERTIFICATIONS</h3>
+    <div class="cert-filters">
+      <button class="btn" data-filter="all">All (35)</button>
+      <button class="btn" data-filter="soc">SOC (6)</button>
+      <button class="btn" data-filter="vapt">VAPT (7)</button>
+      <button class="btn" data-filter="dfir">DFIR (9)</button>
+      <button class="btn" data-filter="grc">GRC (10)</button>
+      <button class="btn" data-filter="cloud">Cloud (3)</button>
+    </div>
+
+    <div class="cert-grid" id="certGrid">
+      <!-- I'll include many certs; categories via data-cat -->
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">Blue Team Junior Analyst</div><div style="color:#9ffca8;margin-top:6px">Security Blue Team</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">SOC LEVEL 1</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">SOC LEVEL 2</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">HoLmes CTF 2025</div><div style="color:#9ffca8;margin-top:6px">Hack The Box</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Multi-Cloud Red Team Analyst</div><div style="color:#9ffca8;margin-top:6px">CyberWarFare Labs</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">SC-900 Microsoft Security Compliance</div><div style="color:#9ffca8;margin-top:6px">Udemy</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="cloud"><div style="font-weight:700">AWS Cloud Practitioner Essentials</div><div style="color:#9ffca8;margin-top:6px">Amazon Web Services</div><span class="cat">CLOUD</span></div>
+<div class="cert card-hover" data-cat="cloud"><div style="font-weight:700">AWS Security Fundamentals</div><div style="color:#9ffca8;margin-top:6px">Amazon Web Services</div><span class="cat">CLOUD</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">Cybersecurity Awareness Professional Certification</div><div style="color:#9ffca8;margin-top:6px">Certiprof</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">ISO 27001:2022 Internal Auditor</div><div style="color:#9ffca8;margin-top:6px">Quality Asia Certifications</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">ISO/IEC 27001:2022 Lead Auditor</div><div style="color:#9ffca8;margin-top:6px">Mastermind</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Cybersecurity Asset Management</div><div style="color:#9ffca8;margin-top:6px">Qualys</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Vulnerability Management Detection and Response</div><div style="color:#9ffca8;margin-top:6px">Qualys</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">Introduction to Cybersecurity</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">Pre Security</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Cisco Certified Ethical Hacker</div><div style="color:#9ffca8;margin-top:6px">Cisco</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">(ISC)2 Certified Cybersecurity</div><div style="color:#9ffca8;margin-top:6px">ISC2</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">Fundamentals of Cybersecurity</div><div style="color:#9ffca8;margin-top:6px">upGrad</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">OS Forensics V10 Triage</div><div style="color:#9ffca8;margin-top:6px">PassMark Software Pty Ltd</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">(ISC)2 Candidate</div><div style="color:#9ffca8;margin-top:6px">ISC2</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">Certified Information Systems Security Professional (CISSP)</div><div style="color:#9ffca8;margin-top:6px">Charles Sturt University</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">ISO/IEC 27001:2022 Information Security Associate</div><div style="color:#9ffca8;margin-top:6px">SkillFront</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Belkasoft iOS Forensic</div><div style="color:#9ffca8;margin-top:6px">Belkasoft</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Certified Ethical Hacker (CEH)</div><div style="color:#9ffca8;margin-top:6px">PrepInsta</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Cybersecurity</div><div style="color:#9ffca8;margin-top:6px">PrepInsta</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">Cyber Threat Management</div><div style="color:#9ffca8;margin-top:6px">Cisco Networking Academy</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Open Source Intelligence (OSINT)</div><div style="color:#9ffca8;margin-top:6px">Basel Institute on Governance</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Android Bug Bounty Hunting</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">Cybersecurity for Leadership</div><div style="color:#9ffca8;margin-top:6px">Great Learning</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Digital Forensic Essentials (DFE)</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Network Defense Essentials (NDE)</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">SQL Injection Attack</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Cybersecurity for Businesses - Fundamental</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Digital Forensic and Incident Response Workshop</div><div style="color:#9ffca8;margin-top:6px">Cyber Octet Pvt Ltd</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Ethical Hacking Essentials (EHE)</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">VAPT</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Introduction to Dark Web, Anonymity, and Cryptocurrency</div><div style="color:#9ffca8;margin-top:6px">EC-Council</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="grc"><div style="font-weight:700">Advanced Cyber Security - Threats and Governance</div><div style="color:#9ffca8;margin-top:6px">Great Learning</div><span class="cat">GRC</span></div>
+<div class="cert card-hover" data-cat="dfir"><div style="font-weight:700">Dark Web Forensics and Investigation Workshop</div><div style="color:#9ffca8;margin-top:6px">Tinkering Hub, Parul University</div><span class="cat">DFIR</span></div>
+<div class="cert card-hover" data-cat="soc"><div style="font-weight:700">Introduction to Cybersecurity</div><div style="color:#9ffca8;margin-top:6px">Cisco Networking Academy</div><span class="cat">SOC</span></div>
+
+    </div>
+  </section>
+
+  <section id="projects" class="fade-in">
+    <h3 class="section-title">// PROJECTS</h3>
+    <div class="projects-grid">
+      <div class="project card-hover">
+        <div style="font-weight:700">ReconVeritas-Automated-Recon-Tool</div>
+        <p style="margin-top:8px;color:#cfeedd">An advanced, fully automated reconnaissance framework built for red teamers and pentesters.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">Python</span><span class="tag">OSINT</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+      <div class="project card-hover">
+        <div style="font-weight:700">RedTeam-WAF-Detection-Bypass-Lab</div>
+        <p style="margin-top:8px;color:#cfeedd">Hands-on red team project focused on WAF Detection, Bypass Techniques, and Web App VAPT.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">WAF Bypass</span><span class="tag">VAPT</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+      <div class="project card-hover">
+        <div style="font-weight:700">Wireshark-HTTP-Credential-Capture</div>
+        <p style="margin-top:8px;color:#cfeedd">Capture login credentials from HTTP using Wireshark packet analyzer.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">Wireshark</span><span class="tag">PCAP</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+      <div class="project card-hover">
+        <div style="font-weight:700">Kibana-SIEM-Dashboard-Demo</div>
+        <p style="margin-top:8px;color:#cfeedd">Detect brute force login attacks using Kibana with sample Linux logs.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">Kibana</span><span class="tag">SIEM</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+      <div class="project card-hover">
+        <div style="font-weight:700">SOC-Incident-Case-Study</div>
+        <p style="margin-top:8px;color:#cfeedd">Anonymized collection of incidents handled in a SOC environment.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">Incident Response</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+      <div class="project card-hover">
+        <div style="font-weight:700">SOC Lab - Open Source Setup</div>
+        <p style="margin-top:8px;color:#cfeedd">Complete open-source SOC setup with Wazuh, The Hive, MISP, ELK Stack.</p>
+        <div class="tools" style="margin-top:8px"><span class="tag">Wazuh</span><span class="tag">MISP</span></div>
+        <div style="margin-top:12px"><a class="btn" href="#" target="_blank">View Code</a></div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:12px"><a class="btn" href="#" target="_blank">View All Projects on GitHub</a></div>
+  </section>
+
+  <section id="blog" class="fade-in">
+    <h3 class="section-title">// BLOG</h3>
+    <div class="blog-list">
+      <div class="post card-hover">
+        <div class="meta"><span>SOC</span><span>• Nov 2024</span><span>• 8 min read</span></div>
+        <div style="font-weight:700;font-size:20px">Understanding Zero Trust Architecture in Modern SOC Operations</div>
+        <div class="readmore" data-post="p1">Read article</div>
+        <div id="p1" class="post-content">
+Understanding Zero Trust Architecture in Modern SOC Operations
+
+Zero Trust is not just a buzzword—it's a fundamental shift in how we approach security. In this article, I explore how implementing Zero Trust principles transformed our SOC operations at scale, reducing false positives by 60% while improving threat detection accuracy.
+
+The traditional perimeter-based security model is dead. In today's cloud-first, remote-work environment, the concept of a "trusted internal network" is obsolete. Zero Trust Architecture (ZTA) operates on a simple principle: never trust, always verify.
+
+In my experience implementing ZTA in enterprise SOC environments, the most critical component is continuous verification. Every access request, regardless of origin, must be authenticated, authorized, and encrypted. Here's what we learned:
+
+**Key Implementation Strategies:**
+
+1. **Micro-segmentation**: Break down your network into smaller zones. Each segment requires independent authentication. This limits lateral movement—a critical defense against advanced persistent threats (APTs).
+
+2. **Identity-Centric Security**: Move away from IP-based trust. Implement strong identity verification using MFA, biometrics, and behavioral analytics. We saw a 73% reduction in credential-based attacks after implementation.
+
+3. **Least Privilege Access**: Grant minimum necessary permissions. Use just-in-time (JIT) access provisioning. Our access reviews dropped from quarterly to real-time automated checks.
+
+4. **Continuous Monitoring**: Deploy EDR, SIEM, and UEBA solutions. Monitor not just entry points, but lateral movement patterns. We integrated Wazuh with custom detection rules that reduced our MTTD (Mean Time to Detect) from 4 hours to 18 minutes.
+
+**Real-World Impact:**
+
+After six months of ZTA implementation, we observed:
+- 60% reduction in false positive alerts
+- 85% faster incident response times
+- Complete visibility across hybrid cloud environments
+- Automated compliance reporting for SOC 2 and ISO 27001
+
+The transition wasn't without challenges. Legacy applications required creative solutions, and user friction initially increased. However, with proper change management and user education, adoption improved significantly.
+
+Zero Trust isn't a product—it's a journey. Start small, segment critical assets first, and expand gradually. The payoff in reduced risk and improved security posture is worth every effort.
+        </div>
+      </div>
+
+      <div class="post card-hover">
+        <div class="meta"><span>Threat Hunting</span><span>• Oct 2024</span><span>• 12 min read</span></div>
+        <div style="font-weight:700;font-size:20px">The Art of Threat Hunting: From Reactive to Proactive SOC</div>
+        <div class="readmore" data-post="p2">Read article</div>
+        <div id="p2" class="post-content">
+The Art of Threat Hunting: From Reactive to Proactive SOC
+
+Most SOCs operate reactively, responding to alerts. But what if we could find threats before they trigger alarms? This deep dive into proactive threat hunting shares techniques that helped us identify sophisticated attacks hiding in plain sight.
+
+Alert fatigue is real. The average SOC analyst reviews 10,000+ alerts monthly, with 95% being false positives. But the real danger? The 5% of genuine threats buried in noise—and the sophisticated attacks that never trigger alerts at all.
+
+Threat hunting flips the script. Instead of waiting for alerts, we proactively search for indicators of compromise (IOCs) and anomalous behavior. Here's how we transformed our SOC from reactive to proactive:
+
+**The Threat Hunting Methodology:**
+
+1. **Hypothesis-Driven Hunting**
+Start with a hypothesis based on threat intelligence. Example: "Attackers may be using PowerShell to establish persistence."
+
+Hunt query (using Splunk):
+index=windows EventCode=4688 Process_Name="powershell.exe"
+| stats count by User, Process_Command_Line
+| where count > 10
+
+We discovered three instances of scheduled tasks executing encoded PowerShell commands—all legitimate automation that we needed to baseline.
+
+2. **Baseline Normal Behavior**
+You can't find anomalies without understanding normal. We spent three weeks profiling:
+- Typical login times by user role
+- Standard network traffic patterns
+- Expected process execution chains
+- Normal cloud API usage
+
+Tools used: Kibana for visualization, Python scripts for statistical analysis, and Excel (yes, really) for stakeholder reports.
+
+3. **Hunt for Living-off-the-Land Techniques**
+Advanced attackers use legitimate tools. We focused on:
+- WMI for lateral movement
+- PsExec for remote execution
+- certutil for file downloads
+- reg.exe for registry manipulation
+
+Using Sysmon and custom detection rules, we identified legitimate admin activity that needed better documentation—and one instance of potential privilege escalation that turned out to be misconfigured GPO.
+
+4. **Investigate Cloud Misconfigurations**
+Cloud environments are goldmines for attackers. We hunted for:
+- S3 buckets with public access
+- Overly permissive IAM roles
+- Disabled CloudTrail logging
+- Unencrypted data stores
+
+Result: We found 23 security gaps, including one S3 bucket with customer data accessible without authentication. Crisis averted.
+
+**Real Hunting Success Story:**
+
+While investigating unusual DNS queries, we noticed a pattern of failed lookups to newly registered domains. Following the trail:
+1. DNS queries → matched known DGA (Domain Generation Algorithm) patterns
+2. Source machine → developer workstation
+3. Process responsible → npm package with malicious dependency
+4. Impact → contained before data exfiltration
+
+No alert triggered. No antivirus detection. Pure hypothesis-driven hunting saved us.
+
+**Tools of the Trade:**
+- SIEM: Splunk, ELK Stack
+- EDR: CrowdStrike, Microsoft Defender
+- Threat Intel: MISP, AlienVault OTX
+- Custom Scripts: Python with pandas, Jupyter notebooks
+
+**Key Takeaway:**
+Threat hunting isn't about finding something every time—it's about knowing your environment so well that when something is wrong, you feel it. Start with one hypothesis per week. Document your findings. Build a hunting playbook. Over time, you'll develop an intuition that no SIEM can replicate.
+        </div>
+      </div>
+
+      <div class="post card-hover">
+        <div class="meta"><span>Cloud Security</span><span>• Sep 2024</span><span>• 10 min read</span></div>
+        <div style="font-weight:700;font-size:20px">Cloud Security Blind Spots: Lessons from AWS Security Incidents</div>
+        <div class="readmore" data-post="p3">Read article</div>
+        <div id="p3" class="post-content">
+Cloud Security Blind Spots: Lessons from AWS Security Incidents
+
+After analyzing 200+ cloud security incidents, I've identified the most common blind spots in AWS environments. These aren't theoretical vulnerabilities—these are real misconfigurations that led to actual breaches.
+
+Cloud security is fundamentally different from on-premises security. After investigating numerous AWS security incidents, one pattern emerged: most breaches weren't caused by sophisticated zero-days, but by basic misconfigurations and visibility gaps.
+
+**The Top 5 Cloud Security Blind Spots:**
+
+1. IAM Permission Sprawl
+Problem: Over-privileged roles and policies accumulate over time. Developers get admin access "temporarily" for debugging—and keep it forever.
+
+Real incident: A compromised API key with `s3:*` permissions led to a complete data breach. The key belonged to a service account created 18 months prior for a now-deprecated application.
+
+Solution:
+- Implement IAM Access Analyzer
+- Regular access reviews (we automated quarterly reports)
+- Use AWS Organizations SCPs to enforce maximum permissions
+- Adopt least privilege with just-in-time access
+
+2. Insufficient CloudTrail Coverage
+Problem: CloudTrail disabled in some regions, or logs not sent to immutable storage.
+
+Real incident: An attacker disabled CloudTrail in us-west-2 before launching EC2 instances for cryptomining. We had no audit trail of the activity because CloudTrail wasn't enabled in that region.
+
+Solution:
+- Enable CloudTrail in all regions
+- Use Organization Trail for multi-account visibility
+- Send logs to S3 with Object Lock (WORM storage)
+- Set up EventBridge rules for critical API calls
+
+3. Public Exposure of Resources
+Problem: S3 buckets, RDS snapshots, and AMIs accidentally made public.
+
+Solution:
+- Enable S3 Block Public Access at account level
+- Use AWS Config rules: s3-bucket-public-read-prohibited
+- Implement automated scanning with ScoutSuite or Prowler
+
+4. Unencrypted Data at Rest and in Transit
+Problem: Data stored without encryption, or TLS not enforced.
+
+Solution:
+- Enable default EBS encryption
+- Use S3 bucket policies to deny unencrypted uploads
+- Enable RDS encryption for all databases
+
+5. Security Group Misconfigurations
+Problem: 0.0.0.0/0 access to sensitive ports, or overly permissive rules.
+
+Solution:
+- Use AWS Systems Manager Session Manager (no SSH needed)
+- Implement VPC endpoints for AWS service access
+- Regular security group audits with AWS Config
+
+Automation is Key: Use AWS Config, Lambda remediation, Security Hub, and custom scripts.
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="fade-in">
+    <h3 class="section-title">// CONTACT</h3>
+    <div class="two-col">
+      <div class="card card-hover">
+        <h4 style="color:#bfffd0">Send Message _</h4>
+        <div style="margin-top:12px">
+          <input placeholder="Your Name" style="width:100%;padding:10px;border-radius:6px;margin-bottom:8px;background:transparent;border:1px solid rgba(0,200,90,0.06);color:#dfffe4"/>
+          <input placeholder="Your Email" style="width:100%;padding:10px;border-radius:6px;margin-bottom:8px;background:transparent;border:1px solid rgba(0,200,90,0.06);color:#dfffe4"/>
+          <input placeholder="Subject" style="width:100%;padding:10px;border-radius:6px;margin-bottom:8px;background:transparent;border:1px solid rgba(0,200,90,0.06);color:#dfffe4"/>
+          <textarea placeholder="Your Message" style="width:100%;height:120px;padding:10px;border-radius:6px;background:transparent;border:1px solid rgba(0,200,90,0.06);color:#dfffe4"></textarea>
+          <div style="margin-top:10px"><a class="btn primary">Send Message</a></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card card-hover" style="padding:18px;margin-bottom:12px">
+          <h4 style="color:#bfffd0">Contact Info :</h4>
+          <div style="margin-top:8px;color:#cfeedd"><strong>Email</strong><div>akgoswami185@gmail.com</div></div>
+          <div style="margin-top:8px;color:#cfeedd"><strong>Phone</strong><div>+91 9726279007</div></div>
+          <div style="margin-top:8px;color:#cfeedd"><strong>Location</strong><div>Vadodara, Gujarat, India</div></div>
+        </div>
+
+        <div class="card card-hover" style="padding:18px">
+          <h4 style="color:#bfffd0">Social Links :</h4>
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <a class="btn" href="#" target="_blank">LinkedIn</a>
+            <a class="btn" href="#" target="_blank">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &gt;_ © 2025 Aditya Kumar Goswami. All rights reserved.
+  </footer>
+
+</div>
+
+<script>
+/* Matrix background effect */
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+let w, h;
+function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;cols=Math.floor(w/14);yPos=new Array(cols).fill(0)}
+let cols, yPos;
+resize();
+window.addEventListener('resize', resize);
+const letters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポ0123456789@#$%&*';
+function draw(){
+  ctx.fillStyle='rgba(0,0,0,0.12)';
+  ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#00f07a';
+  ctx.font='13px monospace';
+  for(let i=0;i<cols;i++){
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*14, yPos[i]*14);
+    if(yPos[i]*14 > h && Math.random()>0.975) yPos[i]=0;
+    yPos[i]++;
+  }
+}
+setInterval(draw,45);
+
+/* Intersection Observer for fade-in */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+
+/* blog read toggles */
+document.querySelectorAll('.readmore').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    const id = btn.getAttribute('data-post');
+    const el = document.getElementById(id);
+    if(el.style.display==='block'){el.style.display='none';btn.textContent='Read article'}else{el.style.display='block';btn.textContent='Hide article';el.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+
+/* certifications filter */
+document.querySelectorAll('[data-filter]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const f=b.getAttribute('data-filter');
+    document.querySelectorAll('#certGrid .cert').forEach(card=>{
+      if(f==='all'){card.style.display='block';return}
+      card.style.display = card.getAttribute('data-cat')===f ? 'block' : 'none';
+    });
+  });
+});
+
+/* small hover float animations for many cards */
+document.querySelectorAll('.card-hover').forEach(c=>{
+  c.style.transition='transform .35s ease,box-shadow .35s ease';
+  c.addEventListener('mouseenter',()=>c.style.transform='translateY(-8px)');
+  c.addEventListener('mouseleave',()=>c.style.transform='translateY(0)');
+});
+
+/* ensure initial visible on load for hero */
+document.querySelectorAll('.hero, .fade-in').forEach(el=>el.classList.add('visible'));
+</script>
+
+</body>
+</html>
