@@ -108,7 +108,7 @@
   <header id="home" class="hero fade-in">
     <div style="margin-bottom:6px;color:#00ff8a;background:rgba(0,255,120,0.02);display:inline-block;padding:6px 10px;border-radius:6px;border:1px solid rgba(0,200,90,0.08)">&gt;_ root@portfolio:~$ whoami</div>
     <h1>Aditya Kumar Goswami</h1>
-    <h2>&lt;Associate SOC Engineer/&gt;<br>Blue Team Specialist | Threat Detection | Incident Response | Vulnerability Assessment</h2>
+    <h2>&lt;SOC Engineer/&gt;<br>Blue Team Specialist | Threat Detection | Incident Response | Vulnerability Assessment</h2>
 
     <div class="cta">
       <a class="btn primary" id="contactBtn">Get In Touch</a>
@@ -387,6 +387,8 @@ With a strong foundation in DFIR, VAPT, and GRC, I bring a comprehensive approac
 <div class="cert card-hover" data-cat="soc"><div style="font-weight:700">SOC LEVEL 1</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
 <div class="cert card-hover" data-cat="soc"><div style="font-weight:700">SOC LEVEL 2</div><div style="color:#9ffca8;margin-top:6px">TryHackMe</div><span class="cat">SOC</span></div>
 <div class="cert card-hover" data-cat="soc"><div style="font-weight:700">HoLmes CTF 2025</div><div style="color:#9ffca8;margin-top:6px">Hack The Box</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Multi-Cloud Blue Team Analyst</div><div style="color:#9ffca8;margin-top:6px">CyberWarFare Labs</div><span class="cat">SOC</span></div>
+<div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Cyber Security Analyst</div><div style="color:#9ffca8;margin-top:6px">CyberWarFare Labs</div><span class="cat">SOC</span></div>      
 <div class="cert card-hover" data-cat="vapt"><div style="font-weight:700">Multi-Cloud Red Team Analyst</div><div style="color:#9ffca8;margin-top:6px">CyberWarFare Labs</div><span class="cat">VAPT</span></div>
 <div class="cert card-hover" data-cat="grc"><div style="font-weight:700">SC-900 Microsoft Security Compliance</div><div style="color:#9ffca8;margin-top:6px">Udemy</div><span class="cat">GRC</span></div>
 <div class="cert card-hover" data-cat="cloud"><div style="font-weight:700">AWS Cloud Practitioner Essentials</div><div style="color:#9ffca8;margin-top:6px">Amazon Web Services</div><span class="cat">CLOUD</span></div>
@@ -492,17 +494,17 @@ The traditional perimeter-based security model is dead. In today's cloud-first, 
 
 In my experience implementing ZTA in enterprise SOC environments, the most critical component is continuous verification. Every access request, regardless of origin, must be authenticated, authorized, and encrypted. Here's what we learned:
 
-**Key Implementation Strategies:**
+Key Implementation Strategies:
 
 1. **Micro-segmentation**: Break down your network into smaller zones. Each segment requires independent authentication. This limits lateral movement—a critical defense against advanced persistent threats (APTs).
 
-2. **Identity-Centric Security**: Move away from IP-based trust. Implement strong identity verification using MFA, biometrics, and behavioral analytics. We saw a 73% reduction in credential-based attacks after implementation.
+2. Identity-Centric Security: Move away from IP-based trust. Implement strong identity verification using MFA, biometrics, and behavioral analytics. We saw a 73% reduction in credential-based attacks after implementation.
 
-3. **Least Privilege Access**: Grant minimum necessary permissions. Use just-in-time (JIT) access provisioning. Our access reviews dropped from quarterly to real-time automated checks.
+3. Least Privilege Access: Grant minimum necessary permissions. Use just-in-time (JIT) access provisioning. Our access reviews dropped from quarterly to real-time automated checks.
 
-4. **Continuous Monitoring**: Deploy EDR, SIEM, and UEBA solutions. Monitor not just entry points, but lateral movement patterns. We integrated Wazuh with custom detection rules that reduced our MTTD (Mean Time to Detect) from 4 hours to 18 minutes.
+4. Continuous Monitoring: Deploy EDR, SIEM, and UEBA solutions. Monitor not just entry points, but lateral movement patterns. We integrated Wazuh with custom detection rules that reduced our MTTD (Mean Time to Detect) from 4 hours to 18 minutes.
 
-**Real-World Impact:**
+Real-World Impact:
 
 After six months of ZTA implementation, we observed:
 - 60% reduction in false positive alerts
@@ -529,9 +531,9 @@ Alert fatigue is real. The average SOC analyst reviews 10,000+ alerts monthly, w
 
 Threat hunting flips the script. Instead of waiting for alerts, we proactively search for indicators of compromise (IOCs) and anomalous behavior. Here's how we transformed our SOC from reactive to proactive:
 
-**The Threat Hunting Methodology:**
+The Threat Hunting Methodology:
 
-1. **Hypothesis-Driven Hunting**
+1. Hypothesis-Driven Hunting
 Start with a hypothesis based on threat intelligence. Example: "Attackers may be using PowerShell to establish persistence."
 
 Hunt query (using Splunk):
@@ -541,7 +543,7 @@ index=windows EventCode=4688 Process_Name="powershell.exe"
 
 We discovered three instances of scheduled tasks executing encoded PowerShell commands—all legitimate automation that we needed to baseline.
 
-2. **Baseline Normal Behavior**
+2. Baseline Normal Behavior
 You can't find anomalies without understanding normal. We spent three weeks profiling:
 - Typical login times by user role
 - Standard network traffic patterns
@@ -550,7 +552,7 @@ You can't find anomalies without understanding normal. We spent three weeks prof
 
 Tools used: Kibana for visualization, Python scripts for statistical analysis, and Excel (yes, really) for stakeholder reports.
 
-3. **Hunt for Living-off-the-Land Techniques**
+3. Hunt for Living-off-the-Land Techniques
 Advanced attackers use legitimate tools. We focused on:
 - WMI for lateral movement
 - PsExec for remote execution
@@ -559,7 +561,7 @@ Advanced attackers use legitimate tools. We focused on:
 
 Using Sysmon and custom detection rules, we identified legitimate admin activity that needed better documentation—and one instance of potential privilege escalation that turned out to be misconfigured GPO.
 
-4. **Investigate Cloud Misconfigurations**
+4. Investigate Cloud Misconfigurations
 Cloud environments are goldmines for attackers. We hunted for:
 - S3 buckets with public access
 - Overly permissive IAM roles
@@ -568,7 +570,7 @@ Cloud environments are goldmines for attackers. We hunted for:
 
 Result: We found 23 security gaps, including one S3 bucket with customer data accessible without authentication. Crisis averted.
 
-**Real Hunting Success Story:**
+Real Hunting Success Story:
 
 While investigating unusual DNS queries, we noticed a pattern of failed lookups to newly registered domains. Following the trail:
 1. DNS queries → matched known DGA (Domain Generation Algorithm) patterns
@@ -578,13 +580,13 @@ While investigating unusual DNS queries, we noticed a pattern of failed lookups 
 
 No alert triggered. No antivirus detection. Pure hypothesis-driven hunting saved us.
 
-**Tools of the Trade:**
+Tools of the Trade:
 - SIEM: Splunk, ELK Stack
 - EDR: CrowdStrike, Microsoft Defender
 - Threat Intel: MISP, AlienVault OTX
 - Custom Scripts: Python with pandas, Jupyter notebooks
 
-**Key Takeaway:**
+Key Takeaway:
 Threat hunting isn't about finding something every time—it's about knowing your environment so well that when something is wrong, you feel it. Start with one hypothesis per week. Document your findings. Build a hunting playbook. Over time, you'll develop an intuition that no SIEM can replicate.
         </div>
       </div>
@@ -600,7 +602,7 @@ After analyzing 200+ cloud security incidents, I've identified the most common b
 
 Cloud security is fundamentally different from on-premises security. After investigating numerous AWS security incidents, one pattern emerged: most breaches weren't caused by sophisticated zero-days, but by basic misconfigurations and visibility gaps.
 
-**The Top 5 Cloud Security Blind Spots:**
+The Top 5 Cloud Security Blind Spots:
 
 1. IAM Permission Sprawl
 Problem: Over-privileged roles and policies accumulate over time. Developers get admin access "temporarily" for debugging—and keep it forever.
@@ -703,7 +705,7 @@ function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;cols=Mat
 let cols, yPos;
 resize();
 window.addEventListener('resize', resize);
-const letters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポ0123456789@#$%&*';
+const letters = 'rootcommandhackyouhavebeenhackyouarecompromisedpasswordviruscybersecurityvaptsocdfircloudgrc0123456789@#$%&*';
 function draw(){
   ctx.fillStyle='rgba(0,0,0,0.12)';
   ctx.fillRect(0,0,w,h);
